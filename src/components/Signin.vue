@@ -17,7 +17,6 @@ export default {
       ],
       callbacks: {
         signInSuccessWithAuthResult() {
-          localStorage.setItem('authenticated', true)
           window.location.href = '/'
         }
       }

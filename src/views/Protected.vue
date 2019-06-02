@@ -1,12 +1,12 @@
 <template>
   <div>
-    Protected
+    <h2>Protected</h2>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Protected',
+  name: 'protected',
 
   computed: {
     logined() {

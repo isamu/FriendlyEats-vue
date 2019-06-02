@@ -7,8 +7,6 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 new Vue({
   router,
-  created() {
-  },
   store,
   render: h => h(App),
 }).$mount('#app')

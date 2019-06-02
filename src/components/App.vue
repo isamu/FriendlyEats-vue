@@ -32,7 +32,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <router-link to="/Proteced" v-if="logined">
+        <router-link to="/Protected" v-if="logined">
           <v-list-tile>
             <v-list-tile-action>
               <v-icon>dashboard</v-icon>
