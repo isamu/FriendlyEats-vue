@@ -75,6 +75,7 @@
 import firebase from 'firebase/app' 
 import "firebase/auth"
 import "firebase/firestore"
+import "firebase/messaging"
 
 import firebaseConfig from '@/firebase/firebase';
 
@@ -89,6 +90,24 @@ export default {
   },
   created() {
     firebase.initializeApp(firebaseConfig);
+
+    // for messaging
+    if (firebaseConfig.messageKey) {
+      const messaging = firebase.messaging();
+      messaging.usePublicVapidKey(firebaseConfig.messageKey);
+
+      // Request Permission of Notifications
+      messaging.requestPermission().then(() => {
+        console.log('Notification permission granted.');
+        
+        // Get Token
+        messaging.getToken().then((token) => {
+          console.log(token)
+        })
+      }).catch((err) => {
+        console.log('Unable to get permission to notify.', err);
+      });
+    }
     store.dispatch('setUser', { }) 
   },
   computed: {
