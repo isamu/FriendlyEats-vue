@@ -92,7 +92,7 @@ export default {
     firebase.initializeApp(firebaseConfig);
 
     // for messaging
-    if (firebaseConfig.messageKey) {
+    if (firebase.messaging.isSupported() && firebaseConfig.messageKey) {
       const messaging = firebase.messaging();
       messaging.usePublicVapidKey(firebaseConfig.messageKey);
 
