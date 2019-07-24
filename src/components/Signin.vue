@@ -5,7 +5,7 @@
 </template>
 <script>
 import firebase from "firebase/app"
-import firebaseui from "firebaseui"
+import * as firebaseui from "firebaseui"
 import "../../node_modules/firebaseui/dist/firebaseui.css"
 
 export default {
