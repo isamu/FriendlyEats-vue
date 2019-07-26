@@ -1,6 +1,9 @@
-## Purpose
+## Yet another FriendlyEats
 
-This is a start-up kit for a Firebase web project, which uses Vue.js.
+This is yet another FriendlyEats based on a start-up kit for a Firebase web project, which uses Vue.js.
+
+![FriendlyEats](./public/img/sample.jpg "サンプル")
+
 
 ## Instruction
 
