@@ -17,20 +17,10 @@ import * as restaurantData from '@/components/restaurantData'
 export default {
   name: 'Top',
   data() {
-    const restaurants = [];
-    for(var i = 0; i < 20; i ++ ) {
-      restaurants.push(this.rand());
-    }
-
+    const data = restaurantData.getData();
     return {
-      restaurants
+      restaurants: data,
     };
   },
-  methods: {
-    rand: function() {
-      return restaurantData.getRandomRestaurant();
-    },
-  }
-
 }
 </script>

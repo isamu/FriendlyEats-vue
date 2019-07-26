@@ -62,3 +62,12 @@ export const getRandomRestaurant = () => {
     name: getRandomItem(name) + " " + getRandomItem(name2),
   };
 }
+
+export const getData = () => {
+  const restaurants = [];
+  for(var i = 0; i < 20; i ++ ) {
+    restaurants.push(getRandomRestaurant());
+  }
+  return restaurants;
+}
+
