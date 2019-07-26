@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Top from '@/views/Top'
+import Top from '@/components/Top'
 import Signin from '@/components/Signin'
 import Signout from '@/views/Signout'
 

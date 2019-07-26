@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import * as restaurantData from '@/components/restaurantData'
+import * as FriendlyEatsData from '@/components/FriendlyEats.Data'
 
 export default {
   name: 'Top',
   data() {
-    const data = restaurantData.getData();
+    const data = FriendlyEatsData.getAllRestaurants();
     return {
       restaurants: data,
     };
