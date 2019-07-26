@@ -2,9 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Top from '@/views/Top'
-import Hello from '@/views/Hello'
-import Protected from '@/views/Protected'
-import Message from '@/components/Message'
 import Signin from '@/components/Signin'
 import Signout from '@/views/Signout'
 
@@ -29,21 +26,6 @@ const router = new VueRouter({
       name: 'signin',
       component: Signin,
     },
-    {
-      path: '/Hello',
-      name: 'hello',
-      component: Hello,
-    },
-    {
-      path: '/Message',
-      name: 'message',
-      component: Message,
-    },
-    {
-      path: '/Protected',
-      name: 'protected',
-      component: Protected,
-    }
   ]
 })
 
