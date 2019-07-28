@@ -2,16 +2,6 @@
   <v-app>
     <v-navigation-drawer fixed clipped app v-model="navBar">
       <v-list dense class="pt-0">
-        <router-link to="/Signin" v-if="!logined">
-          <v-list-tile>
-            <v-list-tile-action>
-              <v-icon>dashboard</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Signin</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </router-link>
         <router-link to="/">
           <v-list-tile>
             <v-list-tile-action>
@@ -31,12 +21,12 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat><router-link to="/hello">hello</router-link></v-btn>
+        <v-btn flat><router-link to="/">Top</router-link></v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
     <v-content>
-      <router-view v-if="loaded" />
+      <router-view />
     </v-content>
   </v-app>
 </template>
@@ -45,11 +35,8 @@
 import firebase from 'firebase/app' 
 import "firebase/auth"
 import "firebase/firestore"
-import "firebase/messaging"
 
 import firebaseConfig from '@/firebase/firebase';
-
-import store from '@/store/index.js';
 
 export default {
   name: 'App',
@@ -60,33 +47,9 @@ export default {
   },
   created() {
     firebase.initializeApp(firebaseConfig);
-
-    // for messaging
-    if (firebase.messaging.isSupported() && firebaseConfig.messageKey) {
-      const messaging = firebase.messaging();
-      messaging.usePublicVapidKey(firebaseConfig.messageKey);
-
-      // Request Permission of Notifications
-      messaging.requestPermission().then(() => {
-        console.log('Notification permission granted.');
-        
-        // Get Token
-        messaging.getToken().then((token) => {
-          console.log(token)
-        })
-      }).catch((err) => {
-        console.log('Unable to get permission to notify.', err);
-      });
-    }
-    store.dispatch('setUser', { }) 
+    firebase.auth().signInAnonymously();
   },
   computed: {
-    logined() {
-      return !!this.$store.getters.getUser;
-    },
-    loaded() {
-      return !this.$store.getters.getUserLoading;
-    },
   },
   methods: {
     updateNaviBar: function() {

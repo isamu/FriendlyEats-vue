@@ -17,6 +17,7 @@
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
+    "vue-select": "^3.1.0",
     "vuetify": "^1.5.14",
     "vuex": "^3.1.1"
   },

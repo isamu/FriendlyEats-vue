@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "fir-vue-startup-kit"
+    "default": "friendlyeats-vue",
+    "eats": "friendlyeats-vue"
   }
 }

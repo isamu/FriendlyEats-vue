@@ -1,12 +1,11 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyAd-pX35BsCvIBDXstf_LmQaz82PNFGcMI",
-  authDomain: "fir-vue-startup-kit.firebaseapp.com",
-  databaseURL: "https://fir-vue-startup-kit.firebaseio.com",
-  projectId: "fir-vue-startup-kit",
-  storageBucket: "fir-vue-startup-kit.appspot.com",
-  messagingSenderId: "225404938985",
-  appId: "1:225404938985:web:a2cea9fab1722fce",
-  messageKey: "BGwIKr3yZdXmg4Pl-BpIQX_ETtHYl0RqvAJFoc-hYKFyaoU3wZXarqto5DSq1cemFuARMjFvJ02B83T5ga42MKo"
+  apiKey: "AIzaSyD6K7ctQ9mIdO9WR9GmMaHph8QFO0t55UY",
+  authDomain: "friendlyeats-vue.firebaseapp.com",
+  databaseURL: "https://friendlyeats-vue.firebaseio.com",
+  projectId: "friendlyeats-vue",
+  storageBucket: "friendlyeats-vue.appspot.com",
+  messagingSenderId: "497646817001",
+  appId: "1:497646817001:web:425a4449efebb532"
 };
 
 export default firebaseConfig

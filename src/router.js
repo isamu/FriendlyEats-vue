@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Top from '@/components/Top'
+import Restaurant from '@/components/Restaurant'
 import Signin from '@/components/Signin'
 import Signout from '@/views/Signout'
 
@@ -15,6 +16,11 @@ const router = new VueRouter({
       path: '/',
       name: 'index',
       component: Top,
+    },
+    {
+      path: '/restaurant/:id',
+      name: 'restaurant',
+      component: Restaurant,
     },
     {
       path: '/Signout',
