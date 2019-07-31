@@ -33,11 +33,15 @@
     </v-flex>
     <v-flex xs4 />
   </template>
-  <v-flex xs4 v-for="restaurant in restaurants" :key="restaurant.id">
-    <v-card @click="link(restaurant.id)">
-      <img :src="restaurant.photo" /><br/>
-      {{restaurant.name}}<br/>
+  <v-flex xs4 v-for="restaurant in restaurants" :key="restaurant.id" align-content-center=true>
+    <v-card @click="link(restaurant.id)" max-width="80%" :style="{'margin': 'auto'}">
+      <img :src="restaurant.photo" :style="{ 'width': '100%'}"/><br/>
+      <span v-for="price in getPrice(restaurant.price)" :style="{ 'position': 'relative', 'float': 'right'}">{{price.value}}</span>
+      <h2>{{restaurant.name}}</h2>
+      <v-icon v-for="star in getStar(restaurant.avgRating)" v-bind:key="star.id" :style="{'color': '#feb22c'}">{{star.value}}</v-icon><br/>
       {{restaurant.city}}
+      ●
+      {{restaurant.category}}
     </v-card>
   </v-flex>
 </v-layout>
@@ -72,6 +76,24 @@ export default {
   methods: {
     importData: function() {
       FriendlyEatsMock.addMockRestaurants();
+    },
+    getPrice: function(price) {
+      const ret = [];
+      for (let r = 0; r < price; r += 1) {
+        ret.push({id: r, value: "$"});
+      }
+      return ret;
+    },
+    getStar: function(rating) {
+      const ret = [];
+      for (let r = 0; r < 5; r += 1) {
+        if (r < Math.floor(rating)) {
+          ret.push({id: r, value: "star"});
+        } else {
+          ret.push({id: r, value: "star_border"});
+        }
+      }
+      return ret;
     },
     filterData: function() {
       const filters = {
