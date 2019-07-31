@@ -20,7 +20,7 @@ export const getRestaurant = (id) => {
 }
 
 export const getFilteredRestaurants = (filters) => {
-  const query = firebase.firestore().collection('restaurants');
+  let query = firebase.firestore().collection('restaurants');
 
   if (filters.category !== 'Any') {
     query = query.where('category', '==', filters.category);
