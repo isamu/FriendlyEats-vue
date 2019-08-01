@@ -1,11 +1,14 @@
 <template>
 <v-layout row wrap>
   <template v-if="restaurant">
-    <v-flex xs12>
-      <img :src="restaurant.photo" class="image_head"/><br/>
-      {{restaurant.name}}<br/>
-      {{restaurant.city}}<br/>
-      <template v-if="ratings.length === 0">
+    <v-flex xs12 :style="{ backgroundImage: 'url(' + restaurant.photo + ')'}" class="imageHeader">
+      <h2>{{restaurant.name}}</h2>
+      <v-icon v-for="star in getStar(restaurant.avgRating)" v-bind:key="star.id" :style="{'color': '#fff'}">{{star.value}}</v-icon><br/>
+      {{restaurant.city}} / {{restaurant.category}}<br/>
+    </v-flex>
+
+    <template v-if="ratings.length === 0">
+      <v-flex xs12>
         <div id="guy-container" class="mdc-toolbar-fixed-adjust">
           <img class="guy" src="/img/guy_fireats.png" />
           <div class="text">
@@ -14,13 +17,21 @@
           <br />
           <v-btn color="success" @click="AddRating" >Add Rating</v-btn>
         </div>
+      </v-flex>
+    </template>
+    <template v-else>
+      <template v-for="rating in ratings">
+        <v-flex xs2 v-bind:key="rating.id + 'a'" />
+        <v-flex xs8 class="ratingBox" v-bind:key="rating.id + 'b'">
+          <span class="ratingStar">
+            <v-icon v-for="star in getStar(rating.rating)" v-bind:key="star.id">{{star.value}}</v-icon><br/>
+          </span>
+          <span style="{color: '#999'}">{{rating.userName}}</span><br/>
+          {{rating.text}}
+        </v-flex>
+        <v-flex xs2 v-bind:key="rating.id + 'c'"/>
       </template>
-      <template v-else>
-        <template xs12 v-for="rating in ratings">
-          {{rating.rating}} / {{rating.text}} / {{rating.userName}}<br/>
-        </template>
-      </template>
-    </v-flex>
+    </template>
   </template>
   <template v-else>
     <v-flex xs12>
@@ -34,6 +45,7 @@
       </div>
     </v-flex>
   </template>
+
 </v-layout>
 </template>
 
@@ -53,7 +65,18 @@ export default {
     AddRating: async function() {
       const id = this.$route.params.id;
       await FriendlyEatsMock.addMockRatings(id);
-    }
+    },
+    getStar: function(rating) {
+      const ret = [];
+      for (let r = 0; r < 5; r += 1) {
+        if (r < Math.floor(rating)) {
+          ret.push({id: r, value: "star"});
+        } else {
+          ret.push({id: r, value: "star_border"});
+        }
+      }
+      return ret;
+    },
   },
   async created() {
     const id = this.$route.params.id;
@@ -81,9 +104,24 @@ export default {
 </script>
 
 <style scoped>
-.image_head {
-width: 100%;
-height: 40%;
-object-fit: cover;
+.imageHeader {
+    background-repeat: repeat;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    font-size: 1.5em;
+}
+.imageHeader h2 {
+    margin-top: 10px;
+    font-size: 2em;
+}
+.ratingBox {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid;
+}
+.ratingStar {
+    float: right;
+    color: #feb22c;
 }
 </style>
