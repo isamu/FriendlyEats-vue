@@ -111,26 +111,40 @@ export default {
     link: function(id) {
       this.$router.push({ name: 'restaurant', params: { id } })
     },
-    watchData: function(data) {
-      this.detacher = data.onSnapshot((snapshot) => {
-        this.restaurants = [];
-        snapshot.forEach((doc) => {
-          const restaurant = doc.data();
-          restaurant.id = doc.id;
-          this.restaurants.push(restaurant);
-        });
-      });
+    renderer: function() {
+      return {
+        remove: (doc) => {
+          this.restaurants.filter(n => n.id !== doc.id);
+        },
+        display: (doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+
+          const index = this.restaurants.findIndex((element) => { return element.id === doc.id });
+          if (index !== -1) {
+            this.restaurants[index] = data;
+          } else {
+            this.restaurants.push(data);
+          }
+        },
+        empty: () => {
+          this.restaurants = [];
+        },
+      }
+    },
+    watchData: function(query) {
+      this.detacher = FriendlyEatsData.getDocumentsInQuery(query, this.renderer());
     },
     getAllRestaurants: function() {
-      const data = FriendlyEatsData.getAllRestaurants();
-      if (data) {
-        this.watchData(data);
+      const query = FriendlyEatsData.getAllRestaurants();
+      if (query) {
+        this.watchData(query);
       }
     },
     getFilteredRestaurants: function(filters) {
-      const data = FriendlyEatsData.getFilteredRestaurants(filters);
-      if (data) {
-        this.watchData(data);
+      const query = FriendlyEatsData.getFilteredRestaurants(filters);
+      if (query) {
+        this.watchData(query);
       } else {
         alert("getFilteredRestaurants is not implemented yet!")
       }
