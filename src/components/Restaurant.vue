@@ -38,14 +38,18 @@
     </template>
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Add a Review</h3>
-      <div slot="body">hello</div>
+      <div slot="body">
+        <v-icon v-for="star in getStar(selectedRating)" v-bind:key="star.id"  color="#feb22c" v-on:mouseenter="changeRating(star)">{{star.value}}</v-icon><br/>
+        <textarea v-model="message">
+        </textarea>
+      </div>
       <div slot="footer">
-        <button class="modal-default-button" @click="$emit('close')">
+        <v-btn class="modal-default-button" @click="showModal = false">
           CANCEL
-        </button>
-        <button class="modal-default-button" @click="$emit('close')">
+        </v-btn>
+        <v-btn class="modal-default-button" @click="saveRating(); showModal = false">
           SAVE
-        </button>
+        </v-btn>
       </div>
     </modal>
   </template>
@@ -70,6 +74,9 @@ import * as FriendlyEatsData from '@/components/FriendlyEats.Data'
 import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock'
 import modal from '@/components/modal'
 
+import firebase from 'firebase/app' 
+import "firebase/auth"
+
 export default {
   name: 'Top',
   components: {
@@ -79,7 +86,9 @@ export default {
     return {
       restaurant: null,
       ratings: [],
+      selectedRating: 5,
       showModal: false,
+      message: "",
     };
   },
   methods: {
@@ -98,6 +107,19 @@ export default {
       }
       return ret;
     },
+    changeRating: function(rating) {
+      this.selectedRating = rating.id + 1;
+    },
+    saveRating: async function() {
+      const id = this.$route.params.id;
+      await FriendlyEatsData.addRating(id, {
+        rating: this.selectedRating,
+        text: this.message,
+        userName: 'Anonymous (Web)',
+        timestamp: new Date(),
+        userId: firebase.auth().currentUser.uid
+      });
+    }
   },
   async created() {
     const id = this.$route.params.id;
