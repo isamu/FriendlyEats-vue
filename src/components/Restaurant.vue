@@ -39,9 +39,15 @@
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Add a Review</h3>
       <div slot="body">
-        <v-icon v-for="star in getStar(selectedRating)" v-bind:key="star.id"  color="#feb22c" v-on:mouseenter="changeRating(star)">{{star.value}}</v-icon><br/>
-        <textarea v-model="message">
-        </textarea>
+        <div :style="{ borderBottom: '1px solid', paddingBottom: '20px'}">
+          <v-icon v-for="star in getStar(selectedRating)" v-bind:key="star.id" v-on:mouseenter="changeRating(star)">
+            {{star.value}}
+          </v-icon>
+        </div>
+        <div :style="{ borderBottom: '1px solid'}">
+          <textarea v-model="message" class="textarea">
+          </textarea>
+          </div>
       </div>
       <div slot="footer">
         <v-btn class="modal-default-button" @click="showModal = false">
@@ -119,6 +125,8 @@ export default {
         timestamp: new Date(),
         userId: firebase.auth().currentUser.uid
       });
+      this.message = "";
+      this.selectedRating = 5;
     }
   },
   async created() {
@@ -185,6 +193,14 @@ export default {
 }
 .iconHover:hover {
     color: orange;
+}
+.textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100px;
+    resize: none;
+    border-width: 1px 0px 1px 0px;
+    padding: 10px;
 }
 
 </style>
