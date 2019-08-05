@@ -5,8 +5,10 @@
       <h2>{{restaurant.name}}</h2>
       <v-icon v-for="star in getStar(restaurant.avgRating)" v-bind:key="star.id" :style="{'color': '#fff'}">{{star.value}}</v-icon><br/>
       {{restaurant.city}} / {{restaurant.category}}<br/>
+      <div class="iconBox">
+        <v-icon class="iconHover">add_circle</v-icon>
+      </div>
     </v-flex>
-
     <template v-if="ratings.length === 0">
       <v-flex xs12>
         <div id="guy-container" class="mdc-toolbar-fixed-adjust">
@@ -23,10 +25,12 @@
       <template v-for="rating in ratings">
         <v-flex xs2 v-bind:key="rating.id + 'a'" />
         <v-flex xs8 class="ratingBox" v-bind:key="rating.id + 'b'">
-          <span class="ratingStar">
-            <v-icon v-for="star in getStar(rating.rating)" v-bind:key="star.id">{{star.value}}</v-icon><br/>
-          </span>
-          <span style="{color: '#999'}">{{rating.userName}}</span><br/>
+          <div :style="{marginBottom: '10px'}">
+            <span class="ratingStar">
+              <v-icon v-for="star in getStar(rating.rating)" v-bind:key="star.id" color="#feb22c">{{star.value}}</v-icon><br/>
+            </span>
+            <span :style="{color: '#999'}">{{rating.userName}}</span>
+          </div>
           {{rating.text}}
         </v-flex>
         <v-flex xs2 v-bind:key="rating.id + 'c'"/>
@@ -110,6 +114,7 @@ export default {
     color: #fff;
     text-align: center;
     font-size: 1.5em;
+    margin-bottom: 30px;
 }
 .imageHeader h2 {
     margin-top: 10px;
@@ -117,11 +122,30 @@ export default {
 }
 .ratingBox {
     margin-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 16px;
     border-bottom: 1px solid;
+
 }
 .ratingStar {
     float: right;
     color: #feb22c;
 }
+.iconBox {
+    width: 60%;
+    margin: auto;
+}
+.iconHover {
+    float: right;
+    margin: 0px;
+    position: relative;
+    top: 23px;
+    margin-right: 10px;
+    align-self: flex-end;
+    color: gold;
+    font-size: 46px;
+}
+.iconHover:hover {
+    color: orange;
+}
+
 </style>
