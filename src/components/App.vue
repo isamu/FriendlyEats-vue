@@ -45,9 +45,30 @@ export default {
       navBar: false,
     }
   },
-  created() {
+  async created() {
+    if (Object.keys(firebaseConfig).length === 0) {
+      alert("No firebase config. Setup Firebase and update src/firebase/firebase.js")
+      return ;
+    }
     firebase.initializeApp(firebaseConfig);
-    firebase.auth().signInAnonymously();
+
+    try {
+      const user = await firebase.auth().signInAnonymously();
+      console.log(user);
+    } catch (e) {
+      if (e.code === "auth/admin-restricted-operation") {
+        alert("Enable Anonymous Auth on Firebase Authentication console.");
+      } else if(e.code === "auth/internal-error") {
+        try {
+          const message = JSON.parse(e.message)
+          alert(message.error.message);
+        } catch (e) {
+          alert("invalid api key or not set Anonymous user on Firebase Authentication.");
+        }
+      } else {
+        alert("invalid api key or not set Anonymous user on Firebase Authentication.");
+      }
+    }
   },
   computed: {
   },
