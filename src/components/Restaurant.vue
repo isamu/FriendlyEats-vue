@@ -6,7 +6,7 @@
       <v-icon v-for="star in getStar(restaurant.avgRating)" v-bind:key="star.id" :style="{'color': '#fff'}">{{star.value}}</v-icon><br/>
       {{restaurant.city}} / {{restaurant.category}}<br/>
       <div class="iconBox">
-        <v-icon class="iconHover">add_circle</v-icon>
+        <v-icon class="iconHover" @click="showModal = true">add_circle</v-icon>
       </div>
     </v-flex>
     <template v-if="ratings.length === 0">
@@ -36,6 +36,18 @@
         <v-flex xs2 v-bind:key="rating.id + 'c'"/>
       </template>
     </template>
+    <modal v-if="showModal" @close="showModal = false">
+      <h3 slot="header">Add a Review</h3>
+      <div slot="body">hello</div>
+      <div slot="footer">
+        <button class="modal-default-button" @click="$emit('close')">
+          CANCEL
+        </button>
+        <button class="modal-default-button" @click="$emit('close')">
+          SAVE
+        </button>
+      </div>
+    </modal>
   </template>
   <template v-else>
     <v-flex xs12>
@@ -56,13 +68,18 @@
 <script>
 import * as FriendlyEatsData from '@/components/FriendlyEats.Data'
 import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock'
+import modal from '@/components/modal'
 
 export default {
   name: 'Top',
+  components: {
+    modal,
+  },
   data() {
     return {
       restaurant: null,
       ratings: [],
+      showModal: false,
     };
   },
   methods: {
