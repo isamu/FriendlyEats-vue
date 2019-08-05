@@ -4,7 +4,7 @@ import "firebase/firestore";
 export const addRestaurant = (data) => {
   const collection = firebase.firestore().collection('restaurants');
   return collection.add(data);
-}
+};
 
 export const getAllRestaurants = () => {
   const query = firebase.firestore()
@@ -13,11 +13,25 @@ export const getAllRestaurants = () => {
         .limit(50);
   
   return query;
-}
+};
+
+export const getDocumentsInQuery = (query, renderer) => {
+  return query.onSnapshot((snapshot) => {
+    if (!snapshot.size) return renderer.empty();
+
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === 'removed') {
+        renderer.remove(change.doc)
+      } else {
+        renderer.display(change.doc)
+      }
+    });
+  });
+};
 
 export const getRestaurant = (id) => {
   return firebase.firestore().collection('restaurants').doc(id).get();
-}
+};
 
 export const getFilteredRestaurants = (filters) => {
   let query = firebase.firestore().collection('restaurants');
@@ -40,7 +54,7 @@ export const getFilteredRestaurants = (filters) => {
     query = query.orderBy('numRatings', 'desc');
   }
   return query;
-}
+};
 
 export const addRating = (restaurantID, rating) => {
   const collection = firebase.firestore().collection('restaurants');
@@ -62,8 +76,8 @@ export const addRating = (restaurantID, rating) => {
       return transaction.set(newRatingDocument, rating);
     });
   });
-}
+};
 
 export const getRating = (id) => {
   return firebase.firestore().collection('restaurants').doc(id).collection('ratings').orderBy('timestamp', 'desc');
-}
+};
