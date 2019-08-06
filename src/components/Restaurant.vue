@@ -39,7 +39,7 @@
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Add a Review</h3>
       <div slot="body">
-        <div :style="{ borderBottom: '1px solid', paddingBottom: '20px'}">
+        <div :style="{ borderBottom: '1px solid', paddingBottom: '20px', textAlign: 'center'}">
           <v-icon v-for="star in getStar(selectedRating)" v-bind:key="star.id" v-on:mouseenter="changeRating(star)">
             {{star.value}}
           </v-icon>
