@@ -5,11 +5,11 @@ const data = {
       noAuth: "FirebaseコンソールのAuthenticationにいき、Sign-in methodタブでAnonymous Authを有効にしてください。",
     },
     top: {
-      addRestaurant: "addRestaurant() in src/components/FriendlyEats.Data.js is not implemented yet!",
-      getFilteredRestaurants: "getFilteredRestaurants src/components/FriendlyEats.Data.js  is not implemented yet!",
+      addRestaurant: "src/components/FriendlyEats.Data.js の addRestaurant() が未実装です",
+      getFilteredRestaurants: "src/components/FriendlyEats.Data.js の getFilteredRestaurants() が未実装です",
     },
     restaurant: {
-      addRating: "addRating() is not implemented yet!",
+      addRating: "src/components/FriendlyEats.Data.js の addRating() が未実装です",
     },
   },
   en: {
@@ -19,7 +19,7 @@ const data = {
     },
     top: {
       addRestaurant: "addRestaurant() in src/components/FriendlyEats.Data.js is not implemented yet!",
-      getFilteredRestaurants: "getFilteredRestaurants src/components/FriendlyEats.Data.js is not implemented yet!",
+      getFilteredRestaurants: "getFilteredRestaurants() src/components/FriendlyEats.Data.js is not implemented yet!",
     },
     restaurant: {
       addRating: "addRating() is not implemented yet!",
