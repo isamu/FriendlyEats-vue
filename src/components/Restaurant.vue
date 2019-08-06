@@ -53,7 +53,7 @@
         <v-btn class="modal-default-button" @click="showModal = false">
           CANCEL
         </v-btn>
-        <v-btn class="modal-default-button" @click="saveRating(); showModal = false">
+        <v-btn class="modal-default-button" @click="saveRating();">
           SAVE
         </v-btn>
       </div>
@@ -100,7 +100,13 @@ export default {
   methods: {
     AddRating: async function() {
       const id = this.$route.params.id;
-      await FriendlyEatsMock.addMockRatings(id);
+      try {
+        await FriendlyEatsMock.addMockRatings(id);
+      } catch (e) {
+        this.$eventHub.$emit('openModal', {
+          type: 'restaurant.addRating',
+        });
+      }
     },
     getStar: function(rating) {
       const ret = [];
@@ -118,7 +124,7 @@ export default {
     },
     saveRating: async function() {
       const id = this.$route.params.id;
-      await FriendlyEatsData.addRating(id, {
+      const res = await FriendlyEatsData.addRating(id, {
         rating: this.selectedRating,
         text: this.message,
         userName: 'Anonymous (Web)',
@@ -127,6 +133,14 @@ export default {
       });
       this.message = "";
       this.selectedRating = 5;
+      this.showModal = false
+
+      if (!res) {
+        this.$eventHub.$emit('openModal', {
+          type: 'restaurant.addRating',
+        });
+      }
+      
     }
   },
   async created() {

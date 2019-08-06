@@ -30,16 +30,10 @@
       <modal v-if="showModal" @close="showModal = false">
         <h3 slot="header">Error</h3>
         <div slot="body">
-	  <div v-if="errorType==1">
-             No firebase config.<br />
-	     Setup Firebase and update src/firebase/firebase.js<br />
-	  </div>
-	  <div v-if="errorType==2">
-             Enable Anonymous Auth on Firebase Authentication console.
-	  </div>
-	  <div v-if="errorType==99">
-             {{this.errorMessage}}
-	  </div>
+          <div v-if="errorType=='custom'">
+            {{this.errorMessage}}
+          </div>
+          <div v-else v-html="$t(this.errorType)" />
         </div>
       </modal>
     </v-content>
@@ -69,8 +63,10 @@ export default {
     }
   },
   async created() {
+    this.$eventHub.$on('openModal', this.openModal);
+
     if (Object.keys(firebaseConfig).length === 0) {
-      this.setError(1);
+      this.setError('app.noConfig');
       return ;
     }
     firebase.initializeApp(firebaseConfig);
@@ -80,16 +76,16 @@ export default {
       console.log(user);
     } catch (e) {
       if (e.code === "auth/admin-restricted-operation") {
-        this.setError(2);
+        this.setError('app.noAuth');
       } else if(e.code === "auth/internal-error") {
         try {
           const message = JSON.parse(e.message)
-          this.setError(99, message.error.message);
+          this.setError("custom", message.error.message);
         } catch (e) {
-          this.setError(99, "invalid api key or not set Anonymous user on Firebase Authentication.");
+          this.setError("custom", "invalid api key or not set Anonymous user on Firebase Authentication.");
         }
       } else {
-        this.setError(99, "invalid api key or not set Anonymous user on Firebase Authentication.");
+        this.setError("custom", "invalid api key or not set Anonymous user on Firebase Authentication.");
       }
     }
   },
@@ -103,6 +99,9 @@ export default {
       this.showModal = true;
       this.errorType = type;
       this.errorMessage = message;
+    },
+    openModal: function(data) {
+      this.setError(data.type, data.message);
     },
   },
 }
