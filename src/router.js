@@ -6,6 +6,8 @@ import Restaurant from '@/components/Restaurant'
 import Signin from '@/components/Signin'
 import Signout from '@/views/Signout'
 
+Vue.prototype.$eventHub = new Vue();
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
