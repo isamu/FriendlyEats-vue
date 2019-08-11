@@ -91,12 +91,12 @@ npm install
 ```
 ### Firebase の設定取得と書き換え
 
-Firebaseの設定をコンソールから取得して、src/config.js に設定をコピーします。
+Firebaseの設定をコンソールから取得して、src/firebase/firebase.js に設定をコピーします。
 
 - firebase console (from https://firebase.google.com) を開いてprojectを追加.
 - このプロジェクトのダッシュボードで「add app」をクリック、 "web" (</>)を選択.
 - このアプリの設定画面のGeneralタブの Firebase SDK snippetに置いて"Config" を選択
-- `const firebase` で始まる設定をコピーして、ソースコードのsrc/config.jsにコピーする.  
+- `const firebase` で始まる設定をコピーして、ソースコードのsrc/firebase/firebase.jsにコピーする.  
 
 ### スターターアプリをインポートする
 
@@ -555,8 +555,8 @@ firebase deploy --only hosting
 ```
 ✔  Deploy complete!
 
-Project Console: https://console.firebase.google.com/project/friendlyeats-react/overview
-Hosting URL: https://friendlyeats-react.firebaseapp.com
+Project Console: https://console.firebase.google.com/project/friendlyeats-vue/overview
+Hosting URL: https://friendlyeats-vue.firebaseapp.com
 ```
 
 Hosting URLをブラウザで見てみましょう。作成したアプリケーションが見えます！
