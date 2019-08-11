@@ -562,7 +562,7 @@ Hosting URL: https://friendlyeats-vue.firebaseapp.com
 Hosting URLをブラウザで見てみましょう。作成したアプリケーションが見えます！
 
 # 14. まとめ
-このチュートリアルでは、Cloud Firestoreで基本および高度な読み取りと書き込みを実行する方法と、セキュリティルールでデータアクセスを保護する方法を学びました。完全なソリューションは[development]（https://github.com/isamu/FriendlyEats-vue/tree/developmentht）リポジトリで見つけることができます。
+このチュートリアルでは、Cloud Firestoreで基本および高度な読み取りと書き込みを実行する方法と、セキュリティルールでデータアクセスを保護する方法を学びました。完全なソリューションは [development](https://github.com/isamu/FriendlyEats-vue/tree/development) リポジトリで見つけることができます。
 
 Cloud Firestoreの詳細については、次のリソースをご覧ください:
 
