@@ -27,6 +27,15 @@
 
     <v-content>
       <router-view />
+      <modal v-if="showModal" @close="showModal = false">
+        <h3 slot="header">Error</h3>
+        <div slot="body">
+          <div v-if="errorType=='custom'">
+            {{this.errorMessage}}
+          </div>
+          <div v-else v-html="$t(this.errorType)" />
+        </div>
+      </modal>
     </v-content>
   </v-app>
 </template>
@@ -36,18 +45,28 @@ import firebase from 'firebase/app'
 import "firebase/auth"
 import "firebase/firestore"
 
+import modal from '@/components/modal'
+
 import firebaseConfig from '@/firebase/firebase';
 
 export default {
   name: 'App',
+  components: {
+    modal,
+  },
   data () {
     return {
       navBar: false,
+      showModal: false,
+      errorType: null,
+      errorMessage: "",
     }
   },
   async created() {
+    this.$eventHub.$on('openModal', this.openModal);
+
     if (Object.keys(firebaseConfig).length === 0) {
-      alert("No firebase config. Setup Firebase and update src/firebase/firebase.js")
+      this.setError('app.noConfig');
       return ;
     }
     firebase.initializeApp(firebaseConfig);
@@ -57,16 +76,16 @@ export default {
       console.log(user);
     } catch (e) {
       if (e.code === "auth/admin-restricted-operation") {
-        alert("Enable Anonymous Auth on Firebase Authentication console.");
+        this.setError('app.noAuth');
       } else if(e.code === "auth/internal-error") {
         try {
           const message = JSON.parse(e.message)
-          alert(message.error.message);
+          this.setError("custom", message.error.message);
         } catch (e) {
-          alert("invalid api key or not set Anonymous user on Firebase Authentication.");
+          this.setError("custom", "invalid api key or not set Anonymous user on Firebase Authentication.");
         }
       } else {
-        alert("invalid api key or not set Anonymous user on Firebase Authentication.");
+        this.setError("custom", "invalid api key or not set Anonymous user on Firebase Authentication.");
       }
     }
   },
@@ -75,6 +94,14 @@ export default {
   methods: {
     updateNaviBar: function() {
       this.navBar =  !this.navBar;
+    },
+    setError: function(type, message=null) {
+      this.showModal = true;
+      this.errorType = type;
+      this.errorMessage = message;
+    },
+    openModal: function(data) {
+      this.setError(data.type, data.message);
     },
   },
 }

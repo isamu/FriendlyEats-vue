@@ -26,7 +26,6 @@ export const addMockRestaurants = () => {
     const promise = FriendlyEatsData.addRestaurant(data);
 
     if (!promise) {
-      alert('addRestaurant() is not implemented yet!');
       return Promise.reject();
     } else {
       promises.push(promise);
@@ -45,7 +44,6 @@ export const addMockRatings = async (restaurantID) =>  {
     rating.timestamp = new Date();
     const res = await FriendlyEatsData.addRating(restaurantID, rating);
     if (!res) {
-      alert("addRating() is not implemented yet!")
       return Promise.reject();
     } else {
       ratings.push(rating);

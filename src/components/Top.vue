@@ -74,8 +74,14 @@ export default {
     };
   },
   methods: {
-    importData: function() {
-      FriendlyEatsMock.addMockRestaurants();
+    importData: async function() {
+      try {
+        await FriendlyEatsMock.addMockRestaurants();
+      } catch (e) {
+        this.$eventHub.$emit('openModal', {
+          type: 'top.addRestaurant',
+        });
+      }
     },
     getPrice: function(price) {
       const ret = [];
@@ -106,7 +112,6 @@ export default {
         this.detacher();
       }
       this.getFilteredRestaurants(filters);
-      console.log(filters);
     },
     link: function(id) {
       this.$router.push({ name: 'restaurant', params: { id } })
@@ -146,7 +151,9 @@ export default {
       if (query) {
         this.watchData(query);
       } else {
-        alert("getFilteredRestaurants is not implemented yet!")
+        this.$eventHub.$emit('openModal', {
+          type: 'top.getFilteredRestaurants',
+        });
       }
     }
   },
