@@ -1,0 +1,487 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>FriendlyEats-vue</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="dist"
+                  title="FriendlyEats-vue"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="FriendlyEats-vue について" duration="0">
+        <p>FriendlyEats-vueは、Vueを使ったFirebase / Cloud Firestoreのチュートリアル用のアプリです。Cloud Firestoreを学習するために最小限のプログラムをするだけでCloud Firestoreを使ったアプリケーションを作ることができます。</p>
+<p class="image-container"><img alt="sample" src="img/e540e545570f4a3d.jpeg"></p>
+<p>このチュートリアルでは以下のことを学習します。</p>
+<ul>
+<li>WebアプリケーションからCloud Firestoreへの読み書きをする</li>
+<li>リアルタイムにCloud Firestoreのデータの変更を受け取る</li>
+<li>Firebaseのユーザ認証を使ったり、Security Rulesを使ってCloud Firestoreのデータを安全に読み書きする</li>
+<li>Cloud Firestoreの複雑なクエリーを書く</li>
+</ul>
+<p>このチュートリアルを始めるに当たって、必要な開発環境は以下となります。</p>
+<ul>
+<li>Gitクライアント。GitHubのアカウントもあれば用意してください</li>
+<li>Node.jsとnpm &amp;mdash; Nodeはversion 8をお薦めします</li>
+<li>IDEやテキストエディタ。たとえば Emacs, vim, WebStorm, Atom, VS Code, Sublime などからお好きなものを選んでください</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Firebase projectの作成と設定" duration="0">
+        <h2 is-upgraded>Firebase projectを作成する</h2>
+<ol type="1">
+<li><a href="https://console.firebase.google.com" target="_blank">Firebaseのコンソール</a>上で「プロジェクトを追加」をクリックします</li>
+<li>プロジェクト名前を入力します。「FriendlyEats」と入力してください</li>
+<li>入力したプロジェクト名の下にプロジェクトIDが表示されます（変更可能です）<br>作成プロジェクトIDは忘れないように！</li>
+<li>[続行]をクリックします</li>
+<li>Google アナリティクス画面で「今は必要ない」を選択します</li>
+<li>[プロジェクトを作成]をクリックします</li>
+<li>「新しいプロジェクトの準備ができました」が表示されます。[続行]をクリックします</li>
+</ol>
+<p>重要: 作成された Firebaseのプロジェクトは「FriendlyEats」という名前ですが、Firebaseは自動的に「friendlyeats-1234」のような固有のプロジェクトIDを割り当てます。この固有のIDは、あなたのプロジェクトを識別するのに必要です（CLIなどで）。「FriendlyEats」は単にプロジェクトの名前です。</p>
+<p>これから作成するアプリケーションでは、ウェブ上で使えるFirebaseのサービスのうちいくつかを利用します。</p>
+<ul>
+<li>Firebase Authentication &amp;mdash; ユーザーを簡単に管理/識別します</li>
+<li>Cloud Firestore &amp;mdash; クラウド上に構造化されたデータを保存し、データが更新された時は即座に通知します</li>
+<li>Firebase Hosting &amp;mdash; 静的なコンテンツをホスティングします</li>
+</ul>
+<p>以下では、Firebaseコンソールを用いた「Firebase Auth」および「Cloud Firestore」の設定方法について、順を追って説明します。</p>
+<h2 is-upgraded>Anonymous Auth (匿名認証)を有効にする</h2>
+<p>認証はこのチュートリアルの焦点ではありませんが、何らかの形式の認証を使用することは重要です。<br>このアプリでは、匿名ログインを使用します。つまりユーザーは明示的な操作をすることなくログインします。</p>
+<p>そのためには、匿名ログインを有効にする必要がありまず。</p>
+<ol type="1">
+<li>ブラウザで、<a href="https://console.firebase.google.com" target="_blank">Firebaseのコンソール</a>を表示します</li>
+<li>左のナビゲーションメニュー「開発」の「Authentication」をクリックします</li>
+<li>「ログイン方法」タブをクリックします</li>
+<li>「ログインプロバイダ」の「匿名」をクリックし「有効」にしてください</li>
+<li>最後に[保存]をクリックします</li>
+</ol>
+<p class="image-container"><img alt="fee6c3ebdf904459.png" src="img/fee6c3ebdf904459.png"></p>
+<p class="image-container"><img alt="FriendlyEats" title="匿名認証" src="img/85148c44419b87fe.png"></p>
+<p>これでユーザーがWebアプリにアクセスするときに、匿名でログインできるようになりました。詳細は、<a href="https://firebase.google.com/docs/auth/web/anonymous-auth" target="_blank">匿名認証のドキュメント</a>をお読みください。</p>
+<h2 is-upgraded>Cloud Firestoreを有効にする</h2>
+<p>このアプリは、レストランの情報や評価を保存、更新情報を受け取るために、Cloud Firestore（データーベース）を使います。</p>
+<p>そのためには、Cloud Firestoreを有効にする必要があります。</p>
+<ol type="1">
+<li>ブラウザで、Firebaseコンソールを表示します</li>
+<li>左のナビゲーションメニュー「開発」の「Database」をクリックします</li>
+<li>Cloud Firestoreペインで「データベースの作成」をクリックします<br><img alt="8c5f57293d48652.png" src="img/8c5f57293d48652.png"></li>
+<li>オプションの「テストモードで開始」を選択し、セキュリティルールに関する免責事項を読んだ後、[次へ]をクリックします</li>
+<li>ロケーションを選択し（デフォルトのままでも構いませんが、後から変更することはできません）、[完了]をクリックします</li>
+</ol>
+<p>テストモードでは、開発中にCloud Firestoreへ書き込みが自由にできるようになります。セキュリティを強化は、このチュートリアルの後半でおこないます。</p>
+<p class="image-container"><img alt="620b95f93bdb154a.png" src="img/620b95f93bdb154a.png"></p>
+<p>3. サンプルのソースコード取得とインストール</p>
+<h2 is-upgraded>ソースコードを取得する</h2>
+<p>以下のコマンドを使って GitHub レポジトリをクローンします</p>
+<pre><code>git clone https://github.com/isamu/FriendlyEats-vue
+</code></pre>
+<ul>
+<li>自分の変更をGitHubで管理したい場合には、Forkしてcloneしてください</li>
+</ul>
+<p>サンプルコードは📁FriendlyEats-vueディレクトリにCloneする必要があります。<br>以後、このディレクトリ内でコマンドラインを実行してください。</p>
+<pre><code>cd FriendlyEats-vue
+</code></pre>
+<h2 is-upgraded>npmをインストールする</h2>
+<p>npmのパッケージをインストールします。</p>
+<pre><code>npm install
+</code></pre>
+<h2 is-upgraded>Firebaseの設定を取得し config.js を書き換える</h2>
+<p>Firebaseのコンソールから設定を取得し、src/firebase/firebase.js にコピーします。</p>
+<ul>
+<li><a href="https://console.firebase.google.com" target="_blank">Firebaseのコンソール</a> を開いて「FriendlyEats」を選択します</li>
+<li>プロジェクトのダッシュボードの「Get started by adding Firebase to your app」から「Web」<img style="width: 30.00px" src="img/3e0f5b5a7437b79e.png"> を選択します</li>
+<li>「Register app」で、「App nickname」に「FriendlyEats」と入力し、「Also set up Firebase Hosting」にチェックを入れ、「Register app」をクリックします</li>
+<li>再度、<a href="https://console.firebase.google.com" target="_blank">Firebaseのコンソール</a> を開いて「FriendlyEats」を選択します</li>
+<li>左側のメニューから「ProjectOverview」の左横の「設定アイコン」をクリックし「Project settings」を選択します</li>
+<li>アプリの設定画面（Settings）の 全般タブ ＞ Firebase SDK snippet ＞ 構成 を選択します</li>
+<li><code>const firebaseConfig</code> で始まる部分をコピーし、src/firebase/firebase.js 内の相当する部分を置き換えます<br></li>
+</ul>
+<h2 is-upgraded>スターターアプリをインポートする</h2>
+<p>IDE（WebStorm、Atom、Sublime、Visual Studio Code ...）を使用している場合、📁FriendlyEats-vueディレクトリを開くかインポートします。このディレクトリには、レストラン情報とオススメ情報を表示するアプリの未完成なモックコードが含まれています。チュートリアルを通してこのアプリを実装していくので、このモックコードを編集できる必要があります。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Firebase CLI (コマンドラインツール)のインストール" duration="0">
+        <p>Firebaseコマンドラインインターフェイス（CLI）を使用すると、Webアプリをローカルで開発したり、Firebase Hostingにデプロイすることができます。</p>
+<p>Note: CLIをインストールするには、通常NodeJSに付属しているnpmをインストールする必要があります。</p>
+<p>1 . 次のnpmコマンドを実行して、CLIをインストールします。</p>
+<pre><code>npm -g install firebase-tools
+</code></pre>
+<p>動作しませんか？ npmのpermissionを変更する必要がある場合があります。</p>
+<p>2 . 次のコマンドを実行して、CLIが正しくインストールされたことを確認します。</p>
+<pre><code>firebase --version
+</code></pre>
+<p>Firebase CLIのバージョンがv6.2.0以降であることを確認してください。</p>
+<p>3 . 次のコマンドを実行して、Firebase CLIを認証します。</p>
+<pre><code>firebase login
+</code></pre>
+<p>Firebase Hostingのアプリの設定をアプリのローカルディレクトリとファイルから取得するように、ウェブアプリテンプレートを設定しました。ただし、これを行うには、アプリをFirebaseプロジェクトに関連付ける必要があります。</p>
+<p>4 . コマンドラインが、先ほどcloneしたディレクトリーになっているか確認してください（通常FriendlyEats-vueディレクトリー。pwdで現在のディレクトリーを確認できます）</p>
+<p>5 . 次のコマンドを実行して、アプリをFirebaseプロジェクトに関連付けます。</p>
+<pre><code>firebase use --add
+</code></pre>
+<p>6 . プロンプトが表示されたら、本プロジェクトのプロジェクトIDを選択し、Firebaseプロジェクトにエイリアスを指定します。<br>エイリアスは、複数の環境（本番、ステージングなど）を切り替える場合に役立ちます。ただし、このチュートリアルでは、<code>default</code>というエイリアス名を入力します（スペルを間違えると後にインデックスをデプロイする操作等でエラーが発生するので注意してください）。</p>
+<p>7 . コマンドラインの残りの指示に従ってください。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Vueをローカルで起動する" duration="0">
+        <p>アプリで実際に作業を開始する準備ができました！アプリをローカルで実行しましょう！</p>
+<p>1 . 次のコマンドをローカルのCLIで実行します:</p>
+<pre><code>npm run serve
+</code></pre>
+<p>2 . 成功すると次の文を含むメッセージが表示されます</p>
+<pre><code>  - Local:   http://localhost:8080/ 
+</code></pre>
+<p>Vueサーバがローカルで起動しています。 ブラウザ http://localhost:8080 を開くとサンプルアプリを見ることができます。 Vueを起動すると自動的に開く場合もあります。8080という数字は少し別の番号になっている場合もあります。</p>
+<p>3 . ブラウザで http://localhost:8080 を見る</p>
+<p>クラウド上のFirebaseプロジェクトに接続されているFriendlyEatsアプリが表示されます（初回起動時はしばらく時間がかかる場合があります）。</p>
+<p>アプリは自動的にクラウド上のFirebaseプロジェクトに接続し、匿名ユーザーとしてサインインしました。</p>
+<p class="image-container"><img alt="スクリーンショット 2019-08-03 4.28.16.png" style="width: 771.00px" src="img/b382a967c59f76ea.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cloud Firestoreへデータの書き込み" duration="0">
+        <p>このセクションでは、Cloud Firestoreにデータを書き込みます。Firebaseコンソール上で手動でデータ入力を行うこともできますが、Cloud Firestoreの基本的な書き込みを学習する為に、アプリ自体でデータ生成/入力を行います。</p>
+<h2 is-upgraded>データモデル</h2>
+<p>Firestoreデータは、コレクション、ドキュメント、フィールド、およびサブコレクションで構成されています。各レストラン情報をドキュメントとして、<code>restaurants</code>と呼ばれる最上位のコレクションに保存します。</p>
+<p>そして、各レストランのレビューを<code>ratings</code>と名付けたサブコレクションに保存します。</p>
+<p>Tip: Firestoreデータモデルの詳細については、ドキュメントのドキュメントとコレクションをご覧ください。</p>
+<h2 is-upgraded>Firestoreにレストラン情報を追加する</h2>
+<p>このアプリの主なモデルオブジェクトはrestaurantです。<code>restaurants</code>コレクションにレストランのドキュメントを追加するコードを書きましょう。</p>
+<ol type="1">
+<li>cloneしたソースコードの <code>src/components/FriendlyEats.Data.js</code> ファイルを開きます</li>
+<li><code>addRestaurant</code> 関数を探します</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L4-L8.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const addRestaurant = (data) =&gt; {
+  const collection = firebase.firestore().collection(&#39;restaurants&#39;);
+  return collection.add(data);
+};
+</code></pre>
+<p>上記のコードにより、<code>restaurants</code>コレクションに新しいドキュメント(データ)が追加されます。ドキュメントのデータはJavaScriptオブジェクトです。</p>
+<p>この関数は、次のような処理をします。</p>
+<ol type="1">
+<li>レストランのデータを引数として取得します</li>
+<li>Cloud Firestoreの<code>restaurants</code>コレクションへの参照を取得します</li>
+<li>引数で受け取ったデータは、レストランオブジェクトとしてランダムに自動生成し、ドキュメントに追加します</li>
+</ol>
+<p>(* 実際にどのようにデータが生成されるか興味がある人は <code>src/FriendlyEats/FriendlyEats.Mock.js</code> の<code>addMockRestaurants</code>と<code>getRandomRestaurant</code>の実装を見てください。)</p>
+<h2 is-upgraded>restaurants情報を追加しよう!</h2>
+<ol type="1">
+<li>ブラウザのFriendlyEatsアプリに戻り、画面を更新します</li>
+<li>「IMPORT DATA」をクリックします</li>
+</ol>
+<p>まだ画面には何も表示されませんが、Cloud Firestoreにはデータが登録されているはずです。</p>
+<p>実際にみてみましょう。</p>
+<p>Firebaseコンソールの「Cloud Firestore」タブに移動すると、<code>restaurants</code>コレクションに新しいドキュメントが表示されます。</p>
+<p class="image-container"><img alt="f06898b9d6dd4881.png" src="img/f06898b9d6dd4881.png"></p>
+<p>おめでとうございます！！WebアプリからCloud Firestoreにデータを書き込みが成功しました！！</p>
+<p>次のセクションでは、Cloud Firestoreからデータを取得してアプリに表示する方法を学習します。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cloud Firestore のデータを表示" duration="0">
+        <p>このセクションでは、Cloud Firestoreからデータを取得してアプリに表示する方法を学習します。 2つの重要な手順は、クエリの作成とスナップショットリスナーの追加です。このリスナーには、クエリに一致するすべての既存データが通知され、更新をリアルタイムで受信します。</p>
+<p>最初に、レストランのデフォルトのフィルタリングされていないリストを提供するクエリを作成しましょう。</p>
+<ol type="1">
+<li><code>src/components/FriendlyEats.Data.js</code> ファイルを開きます</li>
+<li><code>getAllRestaurants</code> 関数を探します</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L10-L14.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const getAllRestaurants = () =&gt; {
+  const query = firebase.firestore()
+        .collection(&#39;restaurants&#39;)
+        .orderBy(&#39;avgRating&#39;, &#39;desc&#39;)
+        .limit(50);
+
+  return query;
+};
+</code></pre>
+<p>上記のコードでは、<code>restaurants</code>という名のトップレベルコレクションから最大50件のレストランを取得するクエリを作成しています。これらは評価の平均順（現在はすべてゼロ）に並べられています。このクエリを定義後、データの読み込みとレンダリングを行う<code>getDocumentsInQuery</code>関数にこのクエリを渡します。</p>
+<p>これを行うには、スナップショットリスナーを追加します。</p>
+<ul>
+<li><code>src/components/FriendlyEats.Data.js</code> を開きます</li>
+<li><code>getDocumentsInQuery</code> 関数を探します</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ul>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L16-L20.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const getDocumentsInQuery = (query, renderer) =&gt; {
+  return query.onSnapshot((snapshot) =&gt; {
+    if (!snapshot.size) return renderer.empty();
+
+    snapshot.docChanges().forEach((change) =&gt; {
+      if (change.type === &#39;removed&#39;) {
+        renderer.remove(change.doc)
+      } else {
+        renderer.display(change.doc)
+      }
+    });
+  });
+};
+</code></pre>
+<p>上記のコードでは、クエリの結果に変更があるたびに<code>query.onSnapshot</code>をコールバックで呼び出します。</p>
+<ul>
+<li>最初のコールバックは、クエリの結果、全体のデータを<code>snapshot</code>として渡します。これは、Cloud Firestoreの<code>restaurants</code>コレクション全体(50件)を意味します。そして<code>change</code>には、全ての個々のドキュメントが渡され、それを<code>renderer.display</code>関数に渡します。</li>
+<li>ドキュメントが削除された時には、<code>change.type</code>は<code>removed</code>となります。したがって、この場合、UIからレストランを削除する関数を呼び出します。</li>
+</ul>
+<p>両方のメソッドを実装したので、アプリを更新し、Firebaseコンソールで前に表示したレストラン情報がWebアプリに表示されていることを確認します。このセクションを正常に完了した場合、WebアプリはCloud Firestoreでデータを読み書きできています。</p>
+<p>レストランのリストが変更されると、このリスナーは自動的にデータを更新します。<br>Firebaseコンソールに移動して、レストランを手動で削除するか、名前を変更してみてください。サイト上のデータも更新されます。</p>
+<p>Note: <code>Query.get()</code>メソッドを使用することにより、更新通知を常時リアルタイムに受け取るのではなく、Cloud Firestoreからドキュメントを一度だけ取得することもできます。</p>
+<p class="image-container"><img alt="sample.jpg" style="width: 715.00px" src="img/e540e545570f4a3d.jpeg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="データを取得する" duration="0">
+        <p>ここまでは、<code>onSnapshot</code>を使用して更新をリアルタイムで取得する方法を実装しました。<br>つぎは、アプリ内の特定のレストランをクリックした時にトリガーされる機能を実装しましょう。</p>
+<ol type="1">
+<li><code>src/components/FriendlyEats.Data.js</code> を開きます</li>
+<li><code>getRestaurant</code>関数を探します</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L22-L26.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const getRestaurant = (id) =&gt; {
+  return firebase.firestore().collection(&#39;restaurants&#39;).doc(id).get();
+};
+</code></pre>
+<p>このメソッドを実装すると、各レストランのページを表示できるようになります。リスト内のレストランをクリックするだけで、レストランの詳細ページが表示されます。</p>
+<p class="image-container"><img alt="スクリーンショット 2019-08-03 4.32.01.png" style="width: 549.00px" src="img/d3c39abb9e12a38a.png"></p>
+<p>現時点では評価を追加することはできませんが、この機能はチュートリアルの後半で実装します。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="データのソートと絞り込み" duration="0">
+        <p>今のところ、アプリにはレストランのリストが表示されていますが、ユーザーがニーズに基づいてフィルタリングする方法はありません。このセクションでは、Cloud Firestoreの高度なクエリを使用してフィルタリングを有効にします。</p>
+<p>すべての「点心（Dim Sum）」レストランを取得する簡単なクエリの例を次に示します。</p>
+<pre><code>var filteredQuery = query.where(&#39;category&#39;, &#39;==&#39;, &#39;Dim Sum&#39;)
+</code></pre>
+<p>その名前が示すように、<code>where()</code> メソッドは、条件に一致するフィールドを持つコレクション内のドキュメントを取得します。この場合、カテゴリが「点心（Dim Sum）」のレストランのみを取得しています。</p>
+<p>このアプリでは、ユーザーは複数のフィルターをチェーンして、「サンフランシスコのピザ」や「人気のあるロサンゼルスのシーフード」などの特定のクエリを作成できます。</p>
+<p>それでは、ユーザーが選択した複数の条件に基づいてレストランをフィルタリングするクエリを作成するメソッドを作成してみましょう。</p>
+<ol type="1">
+<li><code>src/components/FriendlyEats.Data.js</code> を開きます</li>
+<li><code>getFilteredRestaurants</code>を探します</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L28-L32.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const getFilteredRestaurants = (filters) =&gt; {
+  let query = firebase.firestore().collection(&#39;restaurants&#39;);
+
+  if (filters.category !== &#39;Any&#39;) {
+    query = query.where(&#39;category&#39;, &#39;==&#39;, filters.category);
+  }
+
+  if (filters.city !== &#39;Any&#39;) {
+    query = query.where(&#39;city&#39;, &#39;==&#39;, filters.city);
+  }
+
+  if (filters.price !== &#39;Any&#39;) {
+    query = query.where(&#39;price&#39;, &#39;==&#39;, filters.price.length);
+  }
+
+  if (filters.sort === &#39;Rating&#39;) {
+    query = query.orderBy(&#39;avgRating&#39;, &#39;desc&#39;);
+  } else if (filters.sort === &#39;Reviews&#39;) {
+    query = query.orderBy(&#39;numRatings&#39;, &#39;desc&#39;);
+  }
+  return query;
+};
+</code></pre>
+<p>上記のコードは、複数の<code>where</code>フィルターと1つの<code>orderBy</code>を追加して、ユーザー入力に基づいて複合クエリを作成します。このクエリは、ユーザーの要件に一致するレストランのみを返します。</p>
+<p>ここで、ブラウザでFriendlyEatsアプリを更新し、価格や都市などのカテゴリでフィルタリングできることを確認しようとしても、まだ完全には動きません。検索結果は「Your Cloud Firestore has no documents in /restaurants/」と表示されます。また、ブラウザのJavaScriptコンソールに次のようなエラーが表示される場合があります。</p>
+<pre><code>The query requires an index. You can create it here: https://console.firebase.google.com/project/.../database/firestore/indexes?create_index=...
+</code></pre>
+<p>このエラーが発生する理由は、Cloud Firestoreでほとんどの複合クエリにインデックスが必要なのですが、それをまだ用意していないためです。クエリの際にインデックスを必要とすることで、規模が拡大してもCloud Firestoreを高速に保ちます。</p>
+<p>次のセクションでは、このアプリケーションに必要なインデックスを作成してデプロイします。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cloud Firestoreにindexを追加" duration="0">
+        <p>アプリ内のすべてのパスを探索し、各インデックス作成リンクをたどる必要がない場合は、Firebase CLIを使用して多数のインデックスを一度に簡単に展開できます。</p>
+<p>ダウンロードしたソースコードのルートディレクトリに、firestore.indexes.jsonファイルがあります。このファイルには、フィルターに必要なすべてのインデックスが記述されています。</p>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/firestore.indexes.json" target="_blank">firestore.indexes.json</a></p>
+<pre><code>{
+ &#34;indexes&#34;: [
+   {
+     &#34;collectionGroup&#34;: &#34;restaurants&#34;,
+     &#34;queryScope&#34;: &#34;COLLECTION&#34;,
+     &#34;fields&#34;: [
+       { &#34;fieldPath&#34;: &#34;city&#34;, &#34;order&#34;: &#34;ASCENDING&#34; },
+       { &#34;fieldPath&#34;: &#34;avgRating&#34;, &#34;order&#34;: &#34;DESCENDING&#34; }
+     ]
+   },
+
+   ...
+
+ ]
+}
+</code></pre>
+<p>次のコマンドでこれらのインデックスをデプロイします。</p>
+<pre><code>firebase deploy --only firestore:indexes
+</code></pre>
+<p>数分後、インデックスが有効になり、エラーメッセージが消えます。</p>
+<p>Tip: Cloud Firestoreのインデックスの詳細については、ドキュメントをご覧ください。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="トランザクションを使ってデータの書き込み" duration="0">
+        <p>このセクションでは、ユーザーがレストランにレビューを書き込みする機能を実装します。</p>
+<p>今までのところ、書き込みはすべてアトミックで比較的単純です。もし書き込みエラーが発生した場合でも、おおむね単にユーザーに再試行を促すか、でなければアプリ自身が自動的に再試行するでしょう。</p>
+<p>しかし、このアプリにはレストランの評価を追加したいユーザーが多数いるため、読み取りと書き込みが複数回あった場合、それらの調整する必要があります。つまり、最初にレビューが作成されなければならず、次いでレストランの評価数 <code>count</code> と平均評価 <code>average rating</code> を更新する必要があります。そしてこれらの操作のうち、どれか1つが失敗し、他が成功した場合、データベースのある部分のデータが別の部分のデータと一致しない、矛盾した状態になります。</p>
+<p>幸いなことに、Cloud Firestoreには、単一のアトミック操作で複数の読み取りと書き込みを可能にするトランザクション機能が用意されており、これによりデータの一貫性を維持できます。</p>
+<ol type="1">
+<li><code>src/components/FriendlyEats.Data.js</code> を開く</li>
+<li><code>addRating</code> 関数を探す</li>
+<li>関数全体を以下のコードに置き換えます</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/src/components/FriendlyEats.Data.js#L34-L38.js" target="_blank">FriendlyEats.Data.js</a></p>
+<pre><code>export const addRating = (restaurantID, rating) =&gt; {
+  const collection = firebase.firestore().collection(&#39;restaurants&#39;);
+  const document = collection.doc(restaurantID);
+  const newRatingDocument = document.collection(&#39;ratings&#39;).doc();
+
+  return firebase.firestore().runTransaction(function(transaction) {
+    return transaction.get(document).then(function(doc) {
+      const data = doc.data();
+
+      const newAverage =
+            (data.numRatings * data.avgRating + rating.rating) /
+            (data.numRatings + 1);
+
+      transaction.update(document, {
+        numRatings: data.numRatings + 1,
+        avgRating: newAverage
+      });
+      return transaction.set(newRatingDocument, rating);
+    });
+  });
+};
+</code></pre>
+<p>上記のブロックでは、<code>restaurants</code>ドキュメントの<code>averageRating</code>と<code>ratingCount</code>の数値を更新するトランザクションを呼び出します。同時に、<code>ratings</code>サブコレクションに新しい<code>rating</code>を追加します。</p>
+<p>注：評価の追加にトランザクションを使うことは、このチュートリアルのケースでは良い使用例です。ただし、実運用アプリでは、ユーザーによる不正操作を避けるために、平均評価の算出は信頼できるサーバーで行う必要があります。これを行う良い方法は、クライアントから直接評価ドキュメントを作成し、<a href="https://firebase.google.com/docs/functions/" target="_blank">Cloud Functions</a>を利用して新しいレストランの平均評価を更新することです。</p>
+<p>警告：サーバーでトランザクションが失敗すると、コールバックも繰り返し再実行されます。アプリの状態を変更するロジックをトランザクションコールバック内に配置しないでください。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="データを守る" duration="0">
+        <p>このチュートリアルの最初に、アプリのセキュリティルールをテストモードに設定し、自由に読み書きできるようにしました。<br>実際のアプリケーションでは、望ましくないデータの読み込みや変更を防ぐために、よりきめ細かいルールを設定する必要があります。</p>
+<ol type="1">
+<li>Firebase console を開き、開発 ＞ Database を選択します</li>
+<li>Cloud Firestore ＞ ルール タブをクリックします</li>
+<li><code>rules_version = &#39;2&#39;;</code> より下のコードを以下のルールに置き換えて「公開」をクリックします</li>
+</ol>
+<p><a href="https://github.com/isamu/FriendlyEats-vue/blob/master/firestore.rules" target="_blank">firestore.rules</a></p>
+<pre><code>service cloud.firestore {
+  match /databases/{database}/documents {
+
+        // Restaurants:
+        //   - Authenticated user can read
+        //   - Authenticated user can create/update (for demo)
+        //   - Validate updates
+        //   - Deletes are not allowed
+    match /restaurants/{restaurantId} {
+      allow read, create: if request.auth != null;
+      allow update: if request.auth != null
+                    &amp;&amp; request.resource.data.name == resource.data.name
+      allow delete: if false;
+      
+      // Ratings:
+      //   - Authenticated user can read
+      //   - Authenticated user can create if userId matches
+      //   - Deletes and updates are not allowed
+      match /ratings/{ratingId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+                      &amp;&amp; request.resource.data.userId == request.auth.uid;
+        allow update, delete: if false;
+        
+        }
+    }
+  }
+}
+</code></pre>
+<p>これらのルールはアクセスを制限して、クライアントが安全な変更のみ行えることを保証します。例えば：</p>
+<ul>
+<li>レストランのドキュメントの更新では、評価のみが変更でき、名前やその他の不変なデータは変更できません</li>
+<li>ユーザーIDがサインインしているユーザーと一致する場合にのみ評価を作成できます。これにより、なりすましが防止できます</li>
+</ul>
+<p>FirebaseのConsoleを使うかわりに、Firebase CLIを使用してルールをFirebaseプロジェクトに展開できます。作業ディレクトリの<a href="https://github.com/firebase/friendlyeats-web/blob/master/firestore.rules" target="_blank"><br>firestore.rules</a>ファイルには、上記のルールが既に含まれています。これらのルールをローカル環境からFirebaseにデプロイするには、次のコマンドを実行します。</p>
+<pre><code>firebase deploy --only firestore:rules
+</code></pre>
+<p>重要：セキュリティルールの詳細については、<a href="https://firebase.google.com/docs/firestore/security/get-started" target="_blank">セキュリティルールのドキュメント</a>をご覧ください。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="デプロイ" duration="0">
+        <p>まず、Vueをビルドします。</p>
+<pre><code>npm run build
+</code></pre>
+<p><code>build/</code>以下に静的なファイルが生成されます。</p>
+<p>つぎに Cloud Firebase へデプロイします。</p>
+<pre><code>firebase deploy --only hosting
+</code></pre>
+<p>以下のように表示されるとデプロイ成功です。</p>
+<pre><code>✔  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/friendlyeats-vue/overview
+Hosting URL: https://friendlyeats-vue.firebaseapp.com
+</code></pre>
+<p>Hosting URLをブラウザで見てみましょう。作成したアプリケーションが見えます！</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="まとめ" duration="0">
+        <p>このチュートリアルでは、Cloud Firestoreで基本的な、そして高度な読み取りと書き込みを行う方法と、セキュリティルールでデータアクセスを保護する方法を学びました。</p>
+<p>Cloud Firestore の詳細については、次のリソースをご覧ください:</p>
+<ul>
+<li><a href="https://firebase.google.com/docs/firestore/" target="_blank">Cloud Firestore 入門</a></li>
+<li><a href="https://firebase.google.com/docs/firestore/manage-data/structure-data" target="_blank">データ構造の選択</a></li>
+<li><a href="https://firebase.google.com/docs/firestore/client/samples-web" target="_blank">Cloud Firestore のウェブサンプル</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
