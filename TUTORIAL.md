@@ -114,7 +114,7 @@ npmのパッケージをインストールします。
 ```
 npm install
 ```
-### Firebaseの設定を取得し config.js を書き換える
+### Firebaseの設定を取得し firebase.js を書き換える
 
 Firebaseのコンソールから設定を取得し、src/firebase/firebase.js にコピーします。
 
