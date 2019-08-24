@@ -119,7 +119,8 @@ export default {
     renderer: function() {
       return {
         remove: (doc) => {
-          this.restaurants.filter(n => n.id !== doc.id);
+          const index = this.restaurants.findIndex((element) => { return element.id === doc.id });
+          this.$delete(this.restaurants, index);
         },
         display: (doc) => {
           const data = doc.data();
@@ -127,7 +128,7 @@ export default {
 
           const index = this.restaurants.findIndex((element) => { return element.id === doc.id });
           if (index !== -1) {
-            this.restaurants[index] = data;
+            this.$set(this.restaurants, index, data);
           } else {
             this.restaurants.push(data);
           }
