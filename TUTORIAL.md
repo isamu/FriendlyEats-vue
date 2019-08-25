@@ -26,7 +26,7 @@ FriendlyEats-vueは、Vueを使ったFirebase / Cloud Firestoreのチュート�
 このチュートリアルを始めるに当たって、必要な開発環境は以下となります。
 
 - Gitクライアント。GitHubのアカウントもあれば用意してください
-- Node.jsとnpm &mdash; Nodeはversion 8をお薦めします
+- Node.jsとnpm \- Nodeはversion 8をお薦めします
 - IDEやテキストエディタ。たとえば Emacs, vim, WebStorm, Atom, VS Code, Sublime などからお好きなものを選んでください
 
 ## Firebase projectの作成と設定
@@ -45,9 +45,9 @@ FriendlyEats-vueは、Vueを使ったFirebase / Cloud Firestoreのチュート�
 
 これから作成するアプリケーションでは、ウェブ上で使えるFirebaseのサービスのうちいくつかを利用します。
 
-- Firebase Authentication &mdash; ユーザーを簡単に管理/識別します
-- Cloud Firestore &mdash; クラウド上に構造化されたデータを保存し、データが更新された時は即座に通知します
-- Firebase Hosting &mdash; 静的なコンテンツをホスティングします
+- Firebase Authentication \- ユーザーを簡単に管理/識別します
+- Cloud Firestore \- クラウド上に構造化されたデータを保存し、データが更新された時は即座に通知します
+- Firebase Hosting \- 静的なコンテンツをホスティングします
 
 以下では、Firebaseコンソールを用いた「Firebase Auth」および「Cloud Firestore」の設定方法について、順を追って説明します。
 
