@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-import Top from '@/components/Top'
-import Restaurant from '@/components/Restaurant'
-import Signin from '@/components/Signin'
-import Signout from '@/views/Signout'
+import Top from '@/components/Top';
+import Restaurant from '@/components/Restaurant';
+import Signin from '@/components/Signin';
+import Signout from '@/views/Signout';
 
 Vue.prototype.$eventHub = new Vue();
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const router = new VueRouter({
   mode: 'history',
@@ -35,7 +35,7 @@ const router = new VueRouter({
       component: Signin,
     },
   ]
-})
+});
 
 
 export default router;

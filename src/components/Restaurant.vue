@@ -76,12 +76,12 @@
 </template>
 
 <script>
-import * as FriendlyEatsData from '@/components/FriendlyEats.Data'
-import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock'
-import modal from '@/components/modal'
+import * as FriendlyEatsData from '@/components/FriendlyEats.Data';
+import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock';
+import modal from '@/components/modal';
 
-import firebase from 'firebase/app' 
-import "firebase/auth"
+import firebase from 'firebase/app';
+import "firebase/auth";
 
 export default {
   name: 'Top',
@@ -133,7 +133,7 @@ export default {
       });
       this.message = "";
       this.selectedRating = 5;
-      this.showModal = false
+      this.showModal = false;
 
       if (!res) {
         this.$eventHub.$emit('openModal', {

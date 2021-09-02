@@ -36,7 +36,7 @@
   <v-flex xs4 v-for="restaurant in restaurants" :key="restaurant.id" align-content-center=true>
     <v-card @click="link(restaurant.id)" max-width="80%" :style="{'margin': 'auto'}">
       <img :src="restaurant.photo" :style="{ 'width': '100%'}"/><br/>
-      <span v-for="price in getPrice(restaurant.price)" :style="{ 'position': 'relative', 'float': 'right'}">{{price.value}}</span>
+      <span v-for="(price, key) in getPrice(restaurant.price)" :style="{ 'position': 'relative', 'float': 'right'}" :key="`${restaurant.id}price${key}`">{{price.value}}</span>
       <h2>{{restaurant.name}}</h2>
       <v-icon v-for="star in getStar(restaurant.avgRating)" v-bind:key="star.id" :style="{'color': '#feb22c'}">{{star.value}}</v-icon><br/>
       {{restaurant.city}}
@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import * as FriendlyEats from '@/components/FriendlyEats'
-import * as FriendlyEatsData from '@/components/FriendlyEats.Data'
-import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock'
-import * as firebase from 'firebase/app' 
+import * as FriendlyEats from '@/components/FriendlyEats';
+import * as FriendlyEatsData from '@/components/FriendlyEats.Data';
+import * as FriendlyEatsMock from '@/components/FriendlyEats.Mock';
+import firebase from 'firebase/app' ;
 
-import vSelect from 'vue-select'
+import vSelect from 'vue-select';
 
 export default {
   name: 'Top',
@@ -139,6 +139,7 @@ export default {
       }
     },
     watchData: function(query) {
+      this.restaurants = [];
       this.detacher = FriendlyEatsData.getDocumentsInQuery(query, this.renderer());
     },
     getAllRestaurants: function() {

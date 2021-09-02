@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import firebase from 'firebase/app' 
-import "firebase/auth"
-import "firebase/firestore"
+import firebase from 'firebase/app' ;
+import "firebase/auth";
+import "firebase/firestore";
 
-import modal from '@/components/modal'
+import modal from '@/components/modal';
 
 import firebaseConfig from '@/firebase/firebase';
 
